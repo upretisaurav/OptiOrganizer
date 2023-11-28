@@ -14,29 +14,42 @@ function Login(){
     const navigate = useNavigate(); 
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        try{
-            const response = await axios.post(`${config.apiBaseUrl}/login`, {
-                username,
-                password
-            });
-            console.log(response.data);
-
-            setUsername("");
-            setPassword("");
-
-            toast.success(`${response.data["message"]}`, {
-              position: toast.POSITION.TOP_RIGHT
-            });
-
-            navigate('/welcome');
-        } catch (error){
-            console.error("Login Error", error.response.data);
-            toast.error(`${error.response.data["message"]}`, {
-              position: toast.POSITION.TOP_RIGHT
+      event.preventDefault();
+      try {
+          const response = await axios.post(`${config.apiBaseUrl}/login`, {
+              username,
+              password
           });
-        }
-    }
+          console.log(response.data);
+  
+          setUsername("");
+          setPassword("");
+  
+          toast.success(`${response.data["message"]}`, {
+            position: toast.POSITION.TOP_RIGHT
+          });
+  
+          navigate('/welcome');
+      } catch (error) {
+          if (error.response) {
+              console.error("Login Error", error.response.data);
+              toast.error(`${error.response.data["message"]}`, {
+                position: toast.POSITION.TOP_RIGHT
+              });
+          } else if (error.request) {
+              console.error("No response was received", error.request);
+              toast.error("Backend server is not responding. Please try again later.", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+          } else {
+              console.error("Error", error.message);
+              toast.error("An error occurred. Please try again.", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+          }
+      }
+  }
+  
     
     return (
         <div className="Auth-form-container">
