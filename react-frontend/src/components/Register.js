@@ -2,20 +2,34 @@ import React, { useState } from "react";
 import axios from "axios";
 import config from "../config";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Register(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        try{
-            const response = await axios.post(`${config.apiBaseUrl}/register`, {username, password});
-            console.log(response.data);
-        } catch (error) {
-            console.error("Registration Error: ", error.response.data);
-        }
-    };
+      event.preventDefault();
+      try{
+          const response = await axios.post(`${config.apiBaseUrl}/register`, {username, password});
+          console.log(response.status, response.data);
+
+          setUsername("");
+          setPassword("");
+
+          toast.success(`${response.data.message}`, {
+              position: toast.POSITION.TOP_RIGHT
+          });
+      } catch (error) {
+          console.error("Registration Error: ", error.response.data);
+
+          toast.error(`Error: ${error.response.data["error"]}`, {
+              position: toast.POSITION.TOP_RIGHT
+          });
+      }
+  };
 
     return (
         <div className="Auth-form-container">
@@ -51,6 +65,7 @@ function Register(){
           </p>
         </div>
       </form>
+      <ToastContainer />
     </div>
     );
 }

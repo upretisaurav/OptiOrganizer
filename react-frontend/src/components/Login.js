@@ -4,6 +4,8 @@ import config from "../config";
 import "./login.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';  
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function Login(){
     const [username, setUsername] = useState("");
@@ -17,8 +19,19 @@ function Login(){
                 password
             });
             console.log(response.data);
+
+            setUsername("");
+            setPassword("");
+
+            toast.success(`${response.data["message"]}`, {
+              position: toast.POSITION.TOP_RIGHT
+            });
+
         } catch (error){
             console.error("Login Error", error.response.data);
+            toast.error(`${error.response.data["message"]}`, {
+              position: toast.POSITION.TOP_RIGHT
+          });
         }
     }
     
@@ -56,6 +69,7 @@ function Login(){
           </p>
         </div>
       </form>
+      <ToastContainer />
     </div>
     );
 }
