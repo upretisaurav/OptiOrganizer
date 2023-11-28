@@ -6,10 +6,12 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';  
 import 'react-toastify/dist/ReactToastify.css'; 
+import { useNavigate } from 'react-router-dom';
 
 function Login(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate(); 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -27,6 +29,7 @@ function Login(){
               position: toast.POSITION.TOP_RIGHT
             });
 
+            navigate('/welcome');
         } catch (error){
             console.error("Login Error", error.response.data);
             toast.error(`${error.response.data["message"]}`, {
